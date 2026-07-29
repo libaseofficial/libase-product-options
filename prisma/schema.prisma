@@ -5,30 +5,153 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
-// enough when changing adapters.
-// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
 datasource db {
   provider = "sqlite"
   url      = "file:dev.sqlite"
 }
 
 model Session {
-  id            String    @id
-  shop          String
-  state         String
-  isOnline      Boolean   @default(false)
-  scope         String?
-  expires       DateTime?
-  accessToken   String
-  userId        BigInt?
-  firstName     String?
-  lastName      String?
-  email         String?
-  accountOwner  Boolean   @default(false)
-  locale        String?
-  collaborator  Boolean?  @default(false)
-  emailVerified Boolean?  @default(false)
+  id                  String    @id
+  shop                String
+  state               String
+  isOnline            Boolean   @default(false)
+  scope               String?
+  expires             DateTime?
+  accessToken         String
+  userId              BigInt?
+  firstName           String?
+  lastName            String?
+  email               String?
+  accountOwner        Boolean   @default(false)
+  locale              String?
+  collaborator        Boolean?  @default(false)
+  emailVerified       Boolean?  @default(false)
   refreshToken        String?
   refreshTokenExpires DateTime?
+}
+
+model OptionSet {
+  id              String           @id @default(cuid())
+  shop            String
+  name            String
+  easifySetId     String?
+  description     String?
+  status          String           @default("draft")
+  sortOrder       Int              @default(0)
+  source          String           @default("manual")
+  settingsJson    String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  fields          OptionField[]
+  productMappings ProductMapping[]
+
+  @@index([shop])
+  @@index([shop, status])
+  @@unique([shop, easifySetId])
+}
+
+model OptionField {
+  id              String            @id @default(cuid())
+  optionSetId     String
+  easifyFieldId   String?
+  type            String
+  label           String
+  name            String?
+  helpText        String?
+  placeholder     String?
+  required        Boolean           @default(false)
+  minLength       Int?
+  maxLength       Int?
+  minValue        Float?
+  maxValue        Float?
+  sortOrder       Int               @default(0)
+  hidden          Boolean           @default(false)
+  settingsJson    String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  optionSet       OptionSet         @relation(fields: [optionSetId], references: [id], onDelete: Cascade)
+  choices         OptionChoice[]
+  sourceConditions OptionCondition[] @relation("SourceField")
+  targetConditions OptionCondition[] @relation("TargetField")
+
+  @@index([optionSetId])
+  @@unique([optionSetId, easifyFieldId])
+}
+
+model OptionChoice {
+  id               String       @id @default(cuid())
+  optionFieldId    String
+  easifyChoiceId   String?
+  label            String
+  value            String
+  sortOrder        Int          @default(0)
+  priceAdjustment  Int          @default(0)
+  linkedProductId  String?
+  linkedVariantId  String?
+  imageUrl         String?
+  available        Boolean      @default(true)
+  settingsJson     String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  optionField      OptionField  @relation(fields: [optionFieldId], references: [id], onDelete: Cascade)
+
+  @@index([optionFieldId])
+  @@index([linkedVariantId])
+  @@unique([optionFieldId, easifyChoiceId])
+}
+
+model OptionCondition {
+  id             String      @id @default(cuid())
+  sourceFieldId  String
+  targetFieldId  String
+  operator       String
+  expectedValue  String?
+  action         String      @default("show")
+  sortOrder      Int         @default(0)
+  settingsJson   String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  sourceField    OptionField @relation("SourceField", fields: [sourceFieldId], references: [id], onDelete: Cascade)
+  targetField    OptionField @relation("TargetField", fields: [targetFieldId], references: [id], onDelete: Cascade)
+
+  @@index([sourceFieldId])
+  @@index([targetFieldId])
+}
+
+model ProductMapping {
+  id               String    @id @default(cuid())
+  optionSetId      String
+  shopifyProductId String
+  productHandle    String?
+  productTitle     String?
+  enabled          Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  optionSet        OptionSet @relation(fields: [optionSetId], references: [id], onDelete: Cascade)
+
+  @@unique([optionSetId, shopifyProductId])
+  @@index([shopifyProductId])
+}
+
+model ImportJob {
+  id             String    @id @default(cuid())
+  shop           String
+  filename       String
+  status         String    @default("pending")
+  totalRows      Int       @default(0)
+  importedRows   Int       @default(0)
+  skippedRows    Int       @default(0)
+  failedRows     Int       @default(0)
+  errorMessage   String?
+  summaryJson    String?
+  createdAt      DateTime  @default(now())
+  completedAt    DateTime?
+
+  @@index([shop])
+  @@index([shop, status])
 }

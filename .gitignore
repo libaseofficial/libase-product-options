@@ -13,6 +13,12 @@ node_modules
 /prisma/dev.sqlite-journal
 database.sqlite
 
+# CSVインポートのステージング用一時ファイル
+/tmp/imports/
+
+# 手動バックアップファイル(例: prisma/schema.prisma.backup)
+*.backup
+
 .env
 .env.*
 

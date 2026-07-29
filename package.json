@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "libase-product-options",
   "private": true,
   "scripts": {
     "build": "react-router build",
@@ -17,7 +17,8 @@
     "prisma": "prisma",
     "graphql-codegen": "graphql-codegen",
     "vite": "vite",
-    "typecheck": "react-router typegen && tsc --noEmit"
+    "typecheck": "react-router typegen && tsc --noEmit",
+    "import:easify": "vite-node scripts/import-easify.ts --"
   },
   "type": "module",
   "engines": {
@@ -57,17 +58,17 @@
     "graphql-config": "^5.1.1",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vite-node": "^3.2.4"
   },
-  "workspaces": {
-    "packages": [
-      "extensions/*"
-    ]
-  },
+  "workspaces": [
+    "extensions/*"
+  ],
   "trustedDependencies": [
     "@shopify/plugin-cloudflare"
   ],
   "overrides": {
     "p-map": "^4.0.0"
-  }
+  },
+  "author": "yamamotokenichirou"
 }
