@@ -1,0 +1,232 @@
+.libase-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+  margin: 1em 0;
+  max-width: 100%;
+}
+
+.libase-options__set {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.libase-options__set-title {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0;
+}
+
+.libase-options__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  max-width: 100%;
+}
+
+.libase-options__label {
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.libase-options__required {
+  color: #d82c0d;
+  margin-inline-start: 0.2em;
+}
+
+.libase-options__input,
+.libase-options__select {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.6em 0.75em;
+  font-size: 1em;
+  border: 1px solid #c9cccf;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.libase-options__checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+
+.libase-options__checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.95em;
+  font-weight: normal;
+}
+
+.libase-options__help {
+  margin: 0;
+  font-size: 0.8em;
+  color: #6d7175;
+}
+
+.libase-options__error {
+  margin: 0;
+  font-size: 0.8em;
+  color: #d82c0d;
+}
+
+.libase-options__field--invalid .libase-options__input,
+.libase-options__field--invalid .libase-options__select {
+  border-color: #d82c0d;
+}
+
+.libase-options__card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.6em;
+}
+
+.libase-options__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.6em;
+  border: 1px solid #c9cccf;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+}
+
+.libase-options__card:has(.libase-options__card-input:checked) {
+  border-color: #2c6ecb;
+  box-shadow: 0 0 0 1px #2c6ecb;
+}
+
+.libase-options__card-input {
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+  margin: 0;
+}
+
+.libase-options__card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3em;
+  width: 100%;
+}
+
+.libase-options__card-image-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #f6f6f7;
+}
+
+.libase-options__card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* 選択肢ごとに画像の縦横比が違ってもカードの高さを揃えるため、
+     枠に合わせて切り抜く(object-fit)。 */
+  object-fit: cover;
+}
+
+.libase-options__card-label {
+  font-size: 0.85em;
+}
+
+.libase-options__card-price {
+  font-size: 0.8em;
+  color: #6d7175;
+}
+
+.libase-options__card-check {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  width: 1.1em;
+  height: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid #c9cccf;
+  background: #fff;
+  font-size: 0.7em;
+  line-height: 1;
+  color: transparent;
+}
+
+.libase-options__card:has(.libase-options__card-input:checked) .libase-options__card-check {
+  border-color: #2c6ecb;
+  background: #2c6ecb;
+  color: #fff;
+}
+
+.libase-options__card-check::after {
+  content: "✓";
+}
+
+.libase-options__field--invalid .libase-options__card-grid {
+  outline: 1px solid #d82c0d;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.libase-options__cart-message {
+  margin: 0;
+  padding: 0.6em 0.8em;
+  font-size: 0.85em;
+  border-radius: 4px;
+  background: #ecf6ec;
+  color: #0f5132;
+}
+
+.libase-options__cart-message--error {
+  background: #fbeae5;
+  color: #8e1f0b;
+}
+
+.libase-options__dynamic-checkout-warning {
+  margin: 0;
+  font-size: 0.8em;
+  color: #6d7175;
+}
+
+.libase-options__checkbox-required-proxy {
+  /* display:none / visibility:hidden はブラウザのフォームバリデーション対象から
+     外れてしまうため使わない。位置とサイズだけを潰して視覚的に隠す。 */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px 0 0;
+  padding: 0;
+  border: 0;
+  opacity: 0.01;
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  .libase-options {
+    gap: 1em;
+  }
+
+  .libase-options__input,
+  .libase-options__select {
+    font-size: 16px; /* iOSでの自動ズームを防ぐ */
+  }
+
+  .libase-options__card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 320px) {
+  .libase-options__card-grid {
+    grid-template-columns: 1fr;
+  }
+}

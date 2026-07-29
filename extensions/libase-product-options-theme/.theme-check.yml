@@ -1,0 +1,18 @@
+extends: theme-check:recommended
+context: app
+ignore:
+  - node_modules/**
+AppBlockMissingSchema:
+  enabled: true
+  severity: 0
+AppBlockValidTags:
+  enabled: true
+  severity: 0
+AssetSizeAppBlockCSS:
+  enabled: true
+  severity: 0
+  thresholdInBytes: 100000
+AssetSizeAppBlockJavaScript:
+  enabled: true
+  severity: 0
+  thresholdInBytes: 10000

@@ -1,0 +1,69 @@
+{%- liquid
+  assign libase_product = block.settings.product
+  assign libase_config = libase_product.metafields.libase_options.configuration.value
+
+  assign libase_has_paid_option = false
+  if libase_config
+    for option_set in libase_config.optionSets
+      for field in option_set.fields
+        for choice in field.choices
+          if choice.linkedVariantId != blank
+            assign libase_has_paid_option = true
+          endif
+        endfor
+      endfor
+    endfor
+  endif
+-%}
+
+{%- if libase_config and libase_config.optionSets.size > 0 -%}
+  <div
+    class="libase-options"
+    data-libase-block-id="{{ block.id }}"
+    {% if libase_has_paid_option %}data-libase-has-paid-options="true"{% endif %}
+    {{ block.shopify_attributes }}
+  >
+    {%- for option_set in libase_config.optionSets -%}
+      <div class="libase-options__set">
+        {%- if option_set.name != blank -%}
+          <h3 class="libase-options__set-title">{{ option_set.name }}</h3>
+        {%- endif -%}
+        {%- for field in option_set.fields -%}
+          {%- render 'option-field', field: field, block_id: block.id -%}
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+
+    {%- if libase_has_paid_option -%}
+      <p class="libase-options__dynamic-checkout-warning">
+        追加料金オプションを含みます。Shop Payなどの動的チェックアウトボタンでは追加料金が反映されないため、「カートに追加」からご購入ください。
+      </p>
+    {%- endif -%}
+  </div>
+
+  {{ 'libase-options.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'libase-options.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "商品オプション (LIBASE)",
+  "target": "section",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "対象商品",
+      "autofill": true
+    },
+    {
+      "type": "paragraph",
+      "content": "刻印文字やギフトラッピングなどの商品オプションを表示します。管理画面の「LIBASE Product Options」アプリでオプションセットを作成し、対象商品に紐付けたうえで公開してください。"
+    },
+    {
+      "type": "paragraph",
+      "content": "注意: Shop Payなどの動的チェックアウトボタンから購入された場合、この商品オプションの入力内容が注文に反映されない場合があります。商品ページの「動的チェックアウトボタンを表示する」設定を無効にするか、購入者へ注意書きを表示することを推奨します。"
+    }
+  ]
+}
+{% endschema %}

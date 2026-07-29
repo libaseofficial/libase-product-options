@@ -1,0 +1,13 @@
+{%- comment -%}
+  カートの整合性チェック用スクリプトを読み込むapp embed。
+  theme editorの「アプリ埋め込み」で有効化すると全ページに配置されるが、
+  実処理(孤立した追加料金明細の削除・数量同期)はカートページ読み込み時のみ動作する。
+{%- endcomment -%}
+<script src="{{ 'libase-cart-guard.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "LIBASE カート整合性チェック",
+  "target": "body"
+}
+{% endschema %}
